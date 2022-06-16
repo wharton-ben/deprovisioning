@@ -59,7 +59,19 @@ function deprovision-user{
     param ( 
         $username
     )
-    Remove-user $username
-    start-sleep -Seconds 5
-    Remove-DocumentsFolder $username
+    write-host "Removing user..."
+    try {
+        Remove-user $username
+    }
+    catch {
+        Write-host "Could not remove user."
+    }
+    write-host "Archiving My Documents and Scan Folder..."
+    start-sleep -Milliseconds 20
+    try {
+        Remove-DocumentsFolder $username
+    }
+    catch {
+        Write-host "Could not archive folders. Either the folders do not exist or the username was entered incorrectly." -ForegroundColor red
+    } 
 }
